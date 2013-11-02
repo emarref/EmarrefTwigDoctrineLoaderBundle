@@ -74,6 +74,7 @@ class Doctrine implements Twig_LoaderInterface
      *
      * @param string $name
      * @throws \Twig_Error_Loader
+     * @throws \Exception
      * @return TemplateInterface
      */
     protected function getTemplateByName($name)
@@ -82,6 +83,10 @@ class Doctrine implements Twig_LoaderInterface
             $template = $this->getRepository()->getTemplateByName($name);
         } catch (NoResultException $ex) {
             throw $this->getTemplateNotFoundException($name);
+        }
+
+        if (!$template instanceof TemplateInterface) {
+            throw new \Exception('Templates must implement the Emarref\Bundle\TwigDoctrineLoaderBundle\Entity\TemplateInterface interface.');
         }
 
         return $template;
