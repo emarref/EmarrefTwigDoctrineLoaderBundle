@@ -3,12 +3,15 @@
 namespace Emarref\Bundle\TwigDoctrineLoaderBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Template
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Emarref\Bundle\TwigDoctrineLoaderBundle\Entity\TemplateRepository")
+ * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity("name")
  */
 class Template
 {
@@ -19,7 +22,7 @@ class Template
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -34,6 +37,20 @@ class Template
      * @ORM\Column(name="content", type="text")
      */
     private $content;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt; 
 
 
     /**
@@ -90,5 +107,82 @@ class Template
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return Template
+     */
+    public function setCreatedAt(\DateTime $created_at)
+    {
+        $this->createdAt = $created_at;
+    
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return Template
+     */
+    public function setUpdatedAt(\DateTime $updated_at)
+    {
+        $this->updatedAt = $updated_at;
+    
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Returns a string representation of this entity
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
+    /**
+     * Update the created and update timestamps of this entity
+     */
+    public function touch()
+    {
+        $now = new DateTime();
+
+        if (!$this->createdAt) {
+            $this->setCreatedAt($now);
+        }
+
+        $this->setUpdatedAt($now);
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function timestampable()
+    {
+        $this->touch();
     }
 }

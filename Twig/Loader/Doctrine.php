@@ -4,6 +4,7 @@ namespace Emarref\Bundle\TwigDoctrineLoaderBundle\Twig\Loader;
 
 use Doctrine\ORM\EntityManager;
 use Twig_LoaderInterface;
+use Doctrine\ORM\NoResultException;
 
 class Doctrine implements Twig_LoaderInterface
 {
@@ -12,7 +13,7 @@ class Doctrine implements Twig_LoaderInterface
      */
     private $entityManager;
 
-    function __construct(EntityManager $entity_manager)
+    public function __construct(EntityManager $entity_manager)
     {
         $this->entityManager = $entity_manager;
     }
@@ -22,15 +23,23 @@ class Doctrine implements Twig_LoaderInterface
      */
     public function getSource($name)
     {
-        $template = $this->entityManager
-            ->getRepository('EmarrefTwigDoctrineLoaderBundle:Template')
-            ->findOneBy(array('name' => $name));
-
+        $template = $this->getTemplateByName($name);
+        
         if (!$template) {
             throw new \Twig_Error_Loader(sprintf('Unable to find database template %s', $name));
         }
 
         return $template->getContent();
+    }
+
+    public function getRepositoryName()
+    {
+        return 'EmarrefTwigDoctrineLoaderBundle:Template';
+    }
+
+    public function getColumn()
+    {
+        return 'name';
     }
 
     /**
@@ -46,6 +55,32 @@ class Doctrine implements Twig_LoaderInterface
      */
     public function isFresh($name, $time)
     {
-        return false;
+        try {
+            $template = $this->getTemplateByName($name);
+        } catch (NoResultException $ex) {
+            throw new Twig_Error_Loader(sprintf('Template "%s" not found by Doctrine.', $name));
+        }
+
+        $updated_at = $template->getUpdatedAt()->getTimestamp();
+
+        return $updated_at <= $time;
+    }
+
+    protected function getTemplateByName($name)
+    {
+        $query_builder = $this->entityManager->createQueryBuilder();
+        
+        $repository_name = $this->getRepositoryName();
+        $column = $this->getColumn();
+
+        $query_builder
+            ->select()
+            ->from($repository_name, 't')
+            ->where(sprintf('t.%s = :identifier', $column))
+            ->setParameter('identifier', $name);
+
+        $template = $query_builder->getSingleResult();
+
+        return $template;
     }
 }
