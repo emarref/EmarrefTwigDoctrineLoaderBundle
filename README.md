@@ -1,6 +1,6 @@
 # EmarrefTwigDoctrineLoaderBundle
 
-Load twig templates from a doctrine connection.
+Load twig templates from a doctrine repository.
 
 ## Installation
 
