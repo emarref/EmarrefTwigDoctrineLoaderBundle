@@ -1,0 +1,20 @@
+{
+    "name": "emarref/twig-doctrine-loader-bundle",
+    "description": "Load twig templates from a doctrine connection",
+    "keywords": ["twig", "doctrine", "template"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Malcolm Fell",
+            "email": "emarref@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/symfony": "2.3.*"
+    },
+    "autoload": {
+        "psr-0": { "Emarref\\Bundle\\TwigDoctrineLoaderBundle": "" }
+    },
+    "target-dir": "Emarref/Bundle/TwigDoctrineLoaderBundle"
+}
