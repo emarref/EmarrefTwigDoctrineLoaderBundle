@@ -66,6 +66,12 @@ class Doctrine implements Twig_LoaderInterface
         return $updated_at <= $time;
     }
 
+    /**
+     * Return the template entity identified by the template name.
+     *
+     * @param string $name
+     * @return mixed
+     */
     protected function getTemplateByName($name)
     {
         $query_builder = $this->entityManager->createQueryBuilder();
