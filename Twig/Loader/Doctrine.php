@@ -73,13 +73,14 @@ class Doctrine implements Twig_LoaderInterface
         $repository_name = $this->getRepositoryName();
         $column = $this->getColumn();
 
-        $query_builder
-            ->select()
+        $query = $query_builder
+            ->select('t')
             ->from($repository_name, 't')
             ->where(sprintf('t.%s = :identifier', $column))
-            ->setParameter('identifier', $name);
+            ->setParameter('identifier', $name)
+            ->getQuery();
 
-        $template = $query_builder->getSingleResult();
+        $template = $query->getSingleResult();
 
         return $template;
     }
