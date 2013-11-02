@@ -9,7 +9,7 @@ Add EmarrefTwigDoctrineLoaderBundle to your composer.json:
 ```json
 {
     "require": {
-        "emarref/twig-doctrine-loader-bundle": "*"
+        "emarref/twig-doctrine-loader-bundle": "dev-master"
     },
     "repositories": [
         {
