@@ -9,11 +9,8 @@
     <services>
         <service id="emarref.twig.loader.doctrine" class="%emarref.twig.loader.doctrine.class%">
             <argument type="service" id="doctrine.orm.entity_manager" />
-            <call method="setRepository">
+            <call method="setRepositoryByName">
                 <argument>%emarref.twig_doctrine_loader.repository%</argument>
-            </call>
-            <call method="setNameColumn">
-                <argument>%emarref.twig_doctrine_loader.name_column%</argument>
             </call>
             <tag name="twig.loader"/>
         </service>

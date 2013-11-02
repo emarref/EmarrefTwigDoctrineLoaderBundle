@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("name")
  */
-class Template
+class Template implements TemplateInterface
 {
     /**
      * @var integer

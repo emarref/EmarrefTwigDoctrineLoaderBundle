@@ -43,14 +43,11 @@ public function registerBundles()
 
 ## Configuration
 
-The default configuration is below. You can modify these settings in your own project's config.yml.
+The default configuration is below. You can modify these settings in your own project's config.yml. The repository must
+implement the Emarref\Bundle\TwigDoctrineLoaderBundle\Entity\TemplateRepositoryInterface interface, and your template
+must implement the Emarref\Bundle\TwigDoctrineLoaderBundle\Entity\TemplateInterface interface.
 
 ```yaml
 emarref_twig_doctrine_loader:
     repository: "EmarrefTwigDoctrineLoaderBundle:Template"
-    name_column:     "name"
 ```
-
-## Todo
-
-- Call method on repository instead of creating query builder from loader.

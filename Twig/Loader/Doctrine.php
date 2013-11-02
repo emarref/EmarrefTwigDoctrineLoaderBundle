@@ -2,8 +2,9 @@
 
 namespace Emarref\Bundle\TwigDoctrineLoaderBundle\Twig\Loader;
 
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManager;
+use Emarref\Bundle\TwigDoctrineLoaderBundle\Entity\TemplateInterface;
+use Emarref\Bundle\TwigDoctrineLoaderBundle\Entity\TemplateRepositoryInterface;
 use Twig_LoaderInterface;
 use Doctrine\ORM\NoResultException;
 
@@ -15,7 +16,7 @@ class Doctrine implements Twig_LoaderInterface
     private $entityManager;
 
     /**
-     * @var ObjectRepository
+     * @var TemplateRepositoryInterface
      */
     private $repository;
 
@@ -30,15 +31,22 @@ class Doctrine implements Twig_LoaderInterface
     }
 
     /**
-     * @param string $repository
+     * @param string $repository_name
      */
-    public function setRepository($repository)
+    public function setRepositoryByName($repository_name)
     {
-        $this->repository = $this->entityManager->getRepository($repository);
+        $repository = $this->entityManager->getRepository($repository_name);
+
+        $this->setRepository($repository);
+    }
+
+    public function setRepository(TemplateRepositoryInterface $repository)
+    {
+        $this->repository = $repository;
     }
 
     /**
-     * @return ObjectRepository
+     * @return TemplateRepositoryInterface
      */
     public function getRepository()
     {
@@ -66,20 +74,12 @@ class Doctrine implements Twig_LoaderInterface
      *
      * @param string $name
      * @throws \Twig_Error_Loader
-     * @return mixed
+     * @return TemplateInterface
      */
     protected function getTemplateByName($name)
     {
-        $query_builder = $this->getRepository()->createQueryBuilder('t');
-
-        $query = $query_builder
-            ->select('t')
-            ->where(sprintf('t.%s = :identifier', $this->getNameColumn()))
-            ->setParameter('identifier', $name)
-            ->getQuery();
-
         try {
-            $template = $query->getSingleResult();
+            $template = $this->getRepository()->getTemplateByName($name);
         } catch (NoResultException $ex) {
             throw $this->getTemplateNotFoundException($name);
         }
@@ -87,6 +87,10 @@ class Doctrine implements Twig_LoaderInterface
         return $template;
     }
 
+    /**
+     * @param string $name
+     * @return \Twig_Error_Loader
+     */
     protected function getTemplateNotFoundException($name)
     {
         return new \Twig_Error_Loader(sprintf('Doctrine was unable to find template "%s" by column "%s"', $name, $this->getNameColumn()));

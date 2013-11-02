@@ -26,6 +26,5 @@ class EmarrefTwigDoctrineLoaderExtension extends Extension
         $loader->load('services.xml');
 
         $container->setParameter('emarref.twig_doctrine_loader.repository', $config['repository']);
-        $container->setParameter('emarref.twig_doctrine_loader.name_column', $config['name_column']);
     }
 }

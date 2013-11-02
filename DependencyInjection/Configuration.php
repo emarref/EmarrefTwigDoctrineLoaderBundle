@@ -23,7 +23,6 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('repository')->defaultValue('EmarrefTwigDoctrineLoaderBundle:Template')->end()
-                ->scalarNode('name_column')->defaultValue('name')->end()
             ->end()
         ;
 
