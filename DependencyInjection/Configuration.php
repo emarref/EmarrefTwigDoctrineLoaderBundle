@@ -20,9 +20,12 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('emarref_twig_doctrine_loader');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->scalarNode('repository')->defaultValue('EmarrefTwigDoctrineLoaderBundle:Template')->end()
+                ->scalarNode('name_column')->defaultValue('name')->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }

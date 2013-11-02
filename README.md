@@ -41,6 +41,16 @@ public function registerBundles()
 }
 ```
 
+## Configuration
+
+The default configuration is below. You can modify these settings in your own project's config.yml.
+
+```yaml
+emarref_twig_doctrine_loader:
+    repository: "EmarrefTwigDoctrineLoaderBundle:Template"
+    name_column:     "name"
+```
+
 ## Todo
 
-- Configurable entity table
+- Call method on repository instead of creating query builder from loader.

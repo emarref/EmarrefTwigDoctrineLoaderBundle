@@ -1,9 +1,0 @@
-parameters:
-    emarref.twig.loader.doctrine.class: Emarref\Bundle\TwigDoctrineLoaderBundle\Twig\Loader\Doctrine
-
-services:
-    emarref.twig.loader.doctrine:
-        class: %emarref.twig.loader.doctrine.class%
-        arguments: [ @doctrine.orm.entity_manager ]
-        tags:
-            - { name: twig.loader }
